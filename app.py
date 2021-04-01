@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 import numpy as np
+import pydeck as pdk
 
 progress_bar = st.sidebar.progress(0)
 status_text = st.sidebar.empty()
@@ -15,8 +16,8 @@ for i in range(1, 101):
     last_rows = new_rows
     time.sleep(0.05)
     
-    
-    
+
+@st.cache    
 def from_data_file(filename):
     url = (
         "https://raw.githubusercontent.com/streamlit/"
