@@ -2,7 +2,7 @@ import streamlit as st
 import time
 import numpy as np
 import pydeck as pdk
-import simplejson as json
+#import simplejson as json
 
 progress_bar = st.sidebar.progress(0)
 status_text = st.sidebar.empty()
