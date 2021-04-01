@@ -17,6 +17,12 @@ for i in range(1, 10):
     last_rows = new_rows
     time.sleep(0.05)
     
+progress_bar.empty()
+
+# Streamlit widgets automatically run the script from top to bottom. Since
+# this button is not connected to any other logic, it just causes a plain
+# rerun.
+st.button("Re-run")
 
 @st.cache    
 def from_data_file(filename):
@@ -90,9 +96,4 @@ try:
 
 
 
-progress_bar.empty()
 
-# Streamlit widgets automatically run the script from top to bottom. Since
-# this button is not connected to any other logic, it just causes a plain
-# rerun.
-st.button("Re-run")
