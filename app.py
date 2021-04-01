@@ -81,12 +81,12 @@ try:
         ))
     else:
         st.error("Please choose at least one layer above.")
-except urllib.error.URLError as e:
-    st.error("""
-        **This demo requires internet access.**
-
-        Connection error: %s
-    """ % e.reason)
+#except urllib.error.URLError as e:
+#    st.error("""
+#        **This demo requires internet access.**
+#
+ #       Connection error: %s
+#   """ % e.reason)
 
 
 
