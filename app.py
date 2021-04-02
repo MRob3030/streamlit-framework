@@ -4,20 +4,20 @@ import numpy as np
 import pydeck as pdk
 #import simplejson as json
 
-progress_bar = st.sidebar.progress(0)
-status_text = st.sidebar.empty()
-last_rows = np.random.randn(1, 1)
-chart = st.line_chart(last_rows)
 
-for i in range(1, 101):
-    new_rows = last_rows[-1, :] + np.random.randn(3, 1).cumsum(axis=0)
-    status_text.text("%i%% Complete" % i)
-    chart.add_rows(new_rows)
-    progress_bar.progress(i)
-    last_rows = new_rows
-    time.sleep(0.05)
-    
-progress_bar.empty()
+import streamlit as st
+
+st.title('Simple Streamlit App')
+
+st.text('Type a number in the box below')
+
+n = st.number_input('Number', step=1)
+
+st.write(f'{n} + 1 = {n+1}')
+
+s = st.text_input('Type a name in the box below')
+
+st.write(f'Hello {s}')
 
 
 
