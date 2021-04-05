@@ -11,6 +11,6 @@ p = figure(
     
 p.line(x, y)
 
-st.bokeh_chart(p)
+st.bokeh_chart(p, use_container_width=True)
 
 
