@@ -1,10 +1,11 @@
-
 import numpy as np
+import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
 from bokeh.plotting import figure
 
 
-st.title("Stock Price 5")
+st.title("Stock Price AAPL")
 
 import requests
 import json 
@@ -15,20 +16,22 @@ url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&sym
 response = requests.get(url)
 data = ((response.json()) ) 
 
-x = [1, 2, 3, 4, 5]
-y = [6, 7, 2, 4, 5]
 
-p = figure(
-    title="Stock Price",
-    x_axis_label="time",
-    y_axis_label="price")
 
-p.line(x, y, line_width=3)
+stock = data['Time Series (Daily)']
+df = pd.DataFrame(stock)
 
-#p.xaxis.fixed_location = 0
-#p.yaxis.fixed_location = 0
+date = df.iloc[0,0]
+prices1 = df.iloc[4]
+prices2 = pd.to_numeric(prices1)
 
-st.bokeh_chart(p, use_container_width=True)
+plt.subplot(121)
+plt.plot(prices2)
+
+
+plt.ylabel('Price')
+plt.xlabel('Date')
+plt.title('Stock')
 
 
 
