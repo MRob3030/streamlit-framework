@@ -4,8 +4,8 @@ from bokeh.plotting import figure, show
 import requests
 import json 
 
-x = [1, 2, 3, 4, 5]
-y = [6, 7, 2, 4, 5]
+#x = [1, 2, 3, 4, 5]
+#y = [6, 7, 2, 4, 5]
 
 #p = figure(
 #     title='simple line example',
@@ -16,8 +16,8 @@ y = [6, 7, 2, 4, 5]
 
 #st.bokeh_chart(p, use_container_width=True)
 
-st.title("Stock Price AAPL")
-
+st.title("Stock Price")
+st.text("Enter Stock")
 
 key = 'EGFI6S3850S7AASC'
 ticker = 'AAPL'
