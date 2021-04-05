@@ -3,6 +3,6 @@ streamlit
 plotly
 python-dotenv
 altair
-bokeh
+bokeh= 0.12.5
 requests
-matplotlib.pyplot
+
