@@ -1,3 +1,4 @@
+meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"
 import streamlit as st
 from bokeh.plotting import figure, show
 
