@@ -16,8 +16,8 @@ import json
 
 #st.bokeh_chart(p, use_container_width=True)
 
-st.title("Stock Price")
-st.text("Enter Stock")
+st.title("Patent")
+st.text("Select Technology")
 
 key = 'EGFI6S3850S7AASC'
 ticker = 'AAPL'
