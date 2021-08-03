@@ -18,6 +18,7 @@ import json
 
 st.title("Patent")
 st.text("Select Technology")
+st.multiselect('Multiselect', [1,2,3])
 
 key = 'EGFI6S3850S7AASC'
 ticker = 'AAPL'
