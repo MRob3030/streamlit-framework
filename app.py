@@ -13,7 +13,7 @@ import json
 import altair as alt
 
 
-df = pd.read_csv('Documents/allow_prob_TC.csv')
+df = pd.read_csv('allow_prob_TC.csv')
 
 st.title("Patent Technology")
 #st.text_input("ENTER NO")
