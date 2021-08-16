@@ -1,38 +1,57 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Apr  5 11:43:40 2021
+
+@author: michaelrobinson
+"""
 import pandas as pd
 import streamlit as st
 from bokeh.plotting import figure, show
 import requests
 import json 
-
-#x = [1, 2, 3, 4, 5]
-#y = [6, 7, 2, 4, 5]
-
-#p = figure(
-#     title='simple line example',
-#     x_axis_label='x',
-#     y_axis_label='y')
-    
-# p.line(x, y, legend_label='Trend', line_width=2)
-
-#st.bokeh_chart(p, use_container_width=True)
-
-st.title("Patent")
-st.text("Select Technology")
-st.multiselect('Multiselect', [1,2,3])
-
-key = 'EGFI6S3850S7AASC'
-ticker = 'AAPL'
-url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={}&apikey={}'.format(ticker, key)
-
-response = requests.get(url)
-data = ((response.json()) ) 
+import altair as alt
 
 
+df = pd.read_csv('Documents/allow_prob_TC.csv')
 
-stock = data['Time Series (Daily)']
-df = pd.DataFrame(stock)
+st.title("Patent Technology")
+#st.text_input("ENTER NO")
 
-date = df.iloc[0,0]
-prices1 = df.iloc[4]
-prices2 = pd.to_numeric(prices1)
-st.line_chart(prices2)
+            
+
+option_tech = st.sidebar.selectbox("Technology", (df['TC']))             
+
+
+tech_allow = df.loc[df['TC'] == option_tech, 'Percent Allowance'].values[0]
+'You selected: ', option_tech   
+'The probability that your patent will be approved with 2 years is:', tech_allow
+
+
+#st.bar_chart(df[['Percent Allowance', 'TC']]) 
+
+#x = df['TC'].values
+#y = df['Percent Allowance'].values
+
+
+brush = alt.selection(type='interval', encodings=['x'])
+
+bars = alt.Chart(df).mark_bar().encode(
+    x='TC',
+    y='Percent Allowance',
+    opacity=alt.condition(brush, alt.OpacityValue(1), alt.OpacityValue(0.7)),
+).add_selection(
+    brush
+)
+
+line = alt.Chart().mark_rule(color='firebrick').encode(
+    y='mean(Percent Allowance):Q',
+    size = alt.SizeValue(3)
+).transform_filter(
+    brush
+)
+
+c = alt.layer(bars, line, data=df)
+
+
+st.altair_chart(c, use_container_width=True)
