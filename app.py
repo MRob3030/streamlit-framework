@@ -23,10 +23,12 @@ st.title("Patent Technology")
 option_tech = st.sidebar.selectbox("Technology", (df['TC']))             
 
 
-tech_allow = df.loc[df['TC'] == option_tech, 'Percent Allowance'].values[0]
+df['Percent Allowance f'] = (100. * df['Percent Allowance'])
+df['Percent Allowance f'] = (df['Percent Allowance f'].map('{:.0f}%'.format))
+tech_allow = df.loc[df['TC'] == option_tech, 'Percent Allowance f'].values[0]
+tech_allow_per = tech_allow
 'You selected: ', option_tech   
 'The probability that your patent will be approved with 2 years is:', tech_allow
-
 
 #st.bar_chart(df[['Percent Allowance', 'TC']]) 
 
