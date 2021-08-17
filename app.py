@@ -14,15 +14,15 @@ import altair as alt
 import time
 
 
-df = pd.read_csv('Documents/allow_prob_TC.csv')
+df = pd.read_csv('allow_prob_TC.csv')
 df = df.sort_values(by=['TC'], inplace=False)
 df = df.reset_index()
 
-df_a = pd.read_csv('Documents/Allow_prob_43k.csv')
+df_a = pd.read_csv('Allow_prob_43k.csv')
 df_a = df_a.sort_values(by=['uspc_class'], inplace= False)
 df_a = df_a.reset_index()   
 
-df_class = pd.read_csv('Documents/Allow_class.csv')
+df_class = pd.read_csv('Allow_class.csv')
 df_class = df_class.sort_values(by=['uspc_class'], inplace = False)
 df_class = df_class.reset_index()   
 
