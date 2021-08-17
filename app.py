@@ -14,12 +14,18 @@ import altair as alt
 import time
 
 
-df = pd.read_csv('allow_prob_TC.csv')
-df_a = pd.read_csv('Allow_prob_1000.csv')
-
+df = pd.read_csv('Documents/allow_prob_TC.csv')
 df = df.sort_values(by=['TC'], inplace=False)
-
 df = df.reset_index()
+
+df_a = pd.read_csv('Documents/Allow_prob_43k.csv')
+df_a = df_a.sort_values(by=['uspc_class'], inplace= False)
+df_a = df_a.reset_index()   
+
+df_class = pd.read_csv('Documents/Allow_class.csv')
+df_class = df_class.sort_values(by=['uspc_class'], inplace = False)
+df_class = df_class.reset_index()   
+
 st.title("Will My Patent Be Granted?")
 
 
@@ -60,6 +66,7 @@ bars = alt.Chart(df).mark_bar().encode(
     x='TC',
     y='Percent Allowance',
     opacity=alt.condition(brush, alt.OpacityValue(1), alt.OpacityValue(0.7)),
+
 ).add_selection(
     brush
 )
@@ -71,13 +78,35 @@ line = alt.Chart().mark_rule(color='firebrick').encode(
     brush
 )
 
-c = alt.layer(bars, line, data=df)
-
-
+c = alt.layer(bars, line, data=df).properties(
+    width=125,
+    height=700,
+).configure_title().configure_axis(
+    labelFontSize = 16,
+    titleFontSize = 20
+)
 st.altair_chart(c, use_container_width=True)
 
 
-option_c = st.selectbox("Classification", (df_a['uspc_class']))   
+st.write("The U.S. Patent and Trademark office uses classification codes to sort applications by technology area. Codes that begin with 'D' refer to Design Patent. The remaining numerical codes encompass all other technologies.  ")
+
+'''
+ 002-028   Apparel and Textiles 
+ 
+ 172       Earth Working
+ 
+ 530-588   Chemistry
+ 
+ 702-726   Data processing: measuring, calibrating, or testing
+ 
+ PLT       Plants
+ 
+ 
+ '''
+
+
+#option_au = st.selectbox("Art Unit", (df_a['examiner_art_unit']))   
+option_c = st.selectbox("Classification", (df_class['uspc_class']))   
 
 
 df_a['Percent Allowance f'] = (100. * df_a['allowance'])
@@ -85,5 +114,39 @@ df_a['Percent Allowance f'] = (df_a['Percent Allowance f'].map('{:.0f}%'.format)
 cpc_allow = df_a.loc[df_a['uspc_class'] == option_c, 'Percent Allowance f'].values[0]
 
 
+
+
+
+df_b = df_a.loc[df_a['uspc_class'] == option_c]
+df_b['average_allow'] = df_b['allowance'].mean()
+df_c = df_b[['examiner_art_unit', 'uspc_class', 'allowance', 'average_allow']]
+
+avg_class = 100. * df_b['allowance'].mean()
+avg_class_f =  ('{:.0f}%').format(avg_class)
+
 '**You selected:** ', option_c   
-'**The probability that your patent will be approved with 2 years is:**', cpc_allow
+'**The probability that your patent will be approved is:**', avg_class_f
+
+df_c
+
+
+
+brush = alt.selection(type='interval', encodings=['x'])
+
+bars2 = alt.Chart(df_c).mark_bar().encode(
+    x='examiner_art_unit',
+    y='allowance',
+    opacity=alt.condition(brush, alt.OpacityValue(1), alt.OpacityValue(0.7)),
+).add_selection(
+    brush
+)
+
+line2 = alt.Chart().mark_rule(color='firebrick').encode(
+    y='average_allow',
+    size = alt.SizeValue(3)
+).transform_filter(
+    brush
+)
+
+d = alt.layer(bars2, line2, data=df_c)
+st.altair_chart(d, use_container_width=True)
