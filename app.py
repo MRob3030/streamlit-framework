@@ -14,8 +14,8 @@ import altair as alt
 import time
 
 
-df = pd.read_csv('Documents/allow_prob_TC.csv')
-df_a = pd.read_csv('Documents/Allow_prob_1000.csv')
+df = pd.read_csv('allow_prob_TC.csv')
+df_a = pd.read_csv('Allow_prob_1000.csv')
 
 df = df.sort_values(by=['TC'], inplace=False)
 
