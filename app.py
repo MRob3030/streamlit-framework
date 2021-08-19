@@ -14,16 +14,16 @@ import altair as alt
 import time
 
 
-df = pd.read_csv('allow_prob_TC.csv')
+df = pd.read_csv('Documents/allow_prob_TC.csv')
 df = df.sort_values(by=['TC'], inplace=False)
 df = df.reset_index()
 
-df_a = pd.read_csv('Allow_prob_43k.csv')
+df_a = pd.read_csv('Documents/Allow_prob_43k.csv')
 df_a = df_a.sort_values(by=['uspc_class'], inplace= False)
 df_a = df_a.reset_index()   
 
-df_class_s = pd.read_csv('Allow_class.csv')
-df_class_top = pd.read_csv('Allow_prob_top3.csv')
+df_class_s = pd.read_csv('Documents/Allow_class.csv')
+df_class_top = pd.read_csv('Documents/Allow_prob_top3.csv')
 
 st.title("Will My Patent Be Granted?")
 
@@ -67,6 +67,9 @@ bars = alt.Chart(df).mark_bar().encode(
     brush
 )
 
+bars.encoding.x.title = 'Technology'
+bars.encoding.y.title = 'Granted Patent Probability'
+
 line = alt.Chart().mark_rule(color='firebrick').encode(
     y='mean(Percent Allowance):Q',
     size = alt.SizeValue(3)
@@ -80,7 +83,8 @@ c = alt.layer(bars, line, data=df).properties(
 ).configure_title().configure_axis(
     labelFontSize = 16,
     titleFontSize = 20
-)
+).configure_axisX(labelAngle = 45)
+
 st.altair_chart(c, use_container_width=True)
 
 
@@ -113,10 +117,11 @@ cpc_allow = df_class_top.loc[df_class_top['uspc_class'] == option_c, 'Percent Al
 
 df_b = df_class_top.loc[df_class_top['uspc_class'] == option_c].set_index('top_au')
 
-best_au = df_b[['examiner_art_unit', 'Percent Allowance f']]
+best_au = df_b[['examiner_art_unit', 'Percent Allowance f', 'allowance']]
 #best_au
 au1 = best_au.iloc[0, 0]
 au_p = best_au.iloc[0, 1]
+au_2 = best_au.iloc[0, 2]
 
 
 df_all = df_a.loc[df_a['uspc_class'] == option_c]
@@ -125,16 +130,21 @@ df_b['average_allow'] = df_all['allowance'].mean()
 avg_class = 100. * df_b['average_allow'].iloc[0]
 avg_class_f =  ('{:.0f}%').format(avg_class)
 
-'**The probability that your patent will be approved for any Art Unit is:**', avg_class_f
-
 st.spinner()
 with st.spinner(text='Calculating...'):
-    time.sleep(1)
+    time.sleep(3)
     st.success('Done')
 
-'**The best chance it will be approved is for Art Unit:**', au1, '**with an approval of:**', au_p
- 
+'**The probability that your patent will be approved for any Art Unit is:**', avg_class_f
 
+
+
+'**The best chance it will be approved is for Art Unit:**', au1, '**with an approval of:**', au_p
+
+ratio = (100. * au_2) / avg_class
+ratio_f = ('{:.1f}x').format(ratio)
+
+'**This represent an improvement of:**', ratio_f, '**above the average art unit**'
 
 
 brush = alt.selection(type='interval', encodings=['x'])
@@ -147,6 +157,10 @@ bars2 = alt.Chart(df_b).mark_bar().encode(
     brush
 )
 
+
+bars2.encoding.x.title = 'Examiner Art Unit'
+bars2.encoding.y.title = 'Granted Probability'
+
 line2 = alt.Chart().mark_rule(color='firebrick').encode(
     y='average_allow',
     size = alt.SizeValue(3)
@@ -154,9 +168,19 @@ line2 = alt.Chart().mark_rule(color='firebrick').encode(
     brush
 )
 
-d = alt.layer(bars2, line2, data=df_b).configure_title().configure_axis(
-    labelFontSize = 16,
-    titleFontSize = 20
-)
+d = alt.layer(bars2, line2, data=df_b).configure_title(fontSize=20).properties(
+
+    title='Top 3 Art Units for Granted Patents',
+    width=125,
+    height=300).configure_axis(
+    labelFontSize = 14,
+    titleFontSize = 14
+   ).configure_axisX(labelAngle = 0)
+
+'''
+
+
+'''
+
 st.altair_chart(d, use_container_width=True)
 
