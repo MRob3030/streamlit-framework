@@ -23,7 +23,7 @@ df_a = df_a.sort_values(by=['uspc_class'], inplace= False)
 df_a = df_a.reset_index()   
 
 df_class_s = pd.read_csv('Allow_class.csv')
-df_class_top = pd.read_csv('Documents/Allow_prob_top3.csv')
+df_class_top = pd.read_csv('Allow_prob_top3.csv')
 
 st.title("Will My Patent Be Granted?")
 
