@@ -29,7 +29,7 @@ st.title("Will My Patent Be Granted?")
 
 
             
-st.write("The U.S. Patent and Trademark office publishes datasets including 11 million patent applications. This includes all applications from 1996 to 2018. When each patent application is filed it is assigned to a technology area and classification code. These features were used to create a prediction of the probability of the application being granted based on historical trends. ")
+st.write("The U.S. Patent and Trademark office publishes a dataset including 11 million patent applications. This includes all applications filed from 1996 to 2018. When each patent application is filed it is assigned to a technology area and classification code (USPC). These features were used to create a prediction of the probability of the application being granted based on historical trends. ")
 
 
 st.write('Select a technology area for your application:')
@@ -62,7 +62,11 @@ bars = alt.Chart(df).mark_bar().encode(
     x='TC',
     y='Percent Allowance',
     opacity=alt.condition(brush, alt.OpacityValue(1), alt.OpacityValue(0.7)),
-
+    # The highlight will be set on the result of a conditional statement
+    color=alt.condition(
+        alt.datum.TC == option_tech,  # If the year is 1810 this test returns True,
+        alt.value('orange'),     # which sets the bar orange.
+        alt.value('steelblue') )  # And if it's not true it sets the bar steelblue.
 ).add_selection(
     brush
 )
@@ -87,6 +91,7 @@ c = alt.layer(bars, line, data=df).properties(
 
 st.altair_chart(c, use_container_width=True)
 
+st.title("Which Art Unit is Best?")
 
 st.write("The U.S. Patent and Trademark office uses classification codes to sort applications by technology area. Codes that begin with 'D' refer to Design Patent. The remaining numerical codes encompass all other technologies.  ")
 
@@ -153,6 +158,11 @@ bars2 = alt.Chart(df_b).mark_bar().encode(
     x='examiner_art_unit',
     y='allowance',
     opacity=alt.condition(brush, alt.OpacityValue(1), alt.OpacityValue(0.7)),
+    # The highlight will be set on the result of a conditional statement
+    color=alt.condition(
+        alt.datum.examiner_art_unit == au1,  # If the year is 1810 this test returns True,
+        alt.value('orange'),     # which sets the bar orange.
+        alt.value('steelblue'))   # And if it's not true it sets the bar steelblue.
 ).add_selection(
     brush
 )
