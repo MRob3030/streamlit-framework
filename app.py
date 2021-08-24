@@ -12,7 +12,11 @@ import requests
 import json 
 import altair as alt
 import time
+from PIL import Image
 
+
+
+    
 
 df = pd.read_csv('allow_prob_TC.csv')
 df = df.sort_values(by=['TC'], inplace=False)
@@ -194,3 +198,19 @@ d = alt.layer(bars2, line2, data=df_b).configure_title(fontSize=20).properties(
 
 st.altair_chart(d, use_container_width=True)
 
+# Details within an expander
+my_expander = st.beta_expander("About This Site", expanded=False)
+with my_expander:
+ 
+    '''
+    ** Data Cleaning **
+          The public dataset from the US Patent Office includes 16 million rows and 20 columns (identifier, date, name, etc.). The data was cleaned by dropping missing or 'NA' values for features modeled (examiner art unit, USPC class, and application status). This resulted in 11,214,913 rows remaining. A pipeline was created with features Examiner_art_unit (categorical One Hot Encoder), Uspc_class (categorical One Hot Encoder), and Appl_status_desc (binary outcome for allowance vs all other outcomes).
+     
+     ** Modeling **  Modeling was performed with Logistic regression (solver='saga') and Random forest (max_depth = 3).  The models were evaluated with the logistic regression shown to have superior precision and recall. The data was grouped and output in Pandas dataframes with a percentage patent granted obtained from the logistic regression predictions for each Examiner Art Unit, USPC Classification pair.
+
+    ** Visualization **
+          This website was created using Streamlit and Altair Charts, and deployed using Heroku. The first bar chart was made by grouping all Examiner Art Units using the first two digits as the Technology area in Pandas dataframes. This was output as a CSV file and charted with Altair. The second chart was similarly created with grouping a dataframe and ranking the top 3 Art Units.
+
+    '''
+    image = Image.open('model_eval.png')
+    st.image(image, caption='Evaluation of the Models')
